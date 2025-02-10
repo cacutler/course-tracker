@@ -11,8 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ng build --prod
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+      - name: Install project dependencies
+        run: npm install
+      - name: Build Angular app
+        run: ng build --prod
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_COURSE_TRACKER_F892D }}
