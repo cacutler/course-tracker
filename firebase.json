@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "public",
+    "public": "dist/course-tracker/browser",
     "ignore": [
       "firebase.json",
       "**/.*",
