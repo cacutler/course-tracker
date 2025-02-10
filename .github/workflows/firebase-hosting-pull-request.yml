@@ -22,7 +22,7 @@ jobs:
       - name: Install project dependencies
         run: npm install
       - name: Build Angular app
-        run: ng build --prod
+        run: ng build
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
