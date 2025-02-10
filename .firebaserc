@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "course-tracker-f892d"
-  }
+    "default": "course-tracker-f892d",
+    "production": "course-tracker-f892d"
+  },
+  "targets": {},
+  "etags": {}
 }
