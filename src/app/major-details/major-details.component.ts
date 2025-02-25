@@ -22,6 +22,7 @@ export class MajorDetailsComponent {
     this.coursesService.getHelloWorld().subscribe(
       {next: (response) => {
         this.message = response.message;
+        console.log(response);
         this.loading = false;
       },
       error: (error) => {
