@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './major-details.component.css'
 })
 export class MajorDetailsComponent {
-  message: string = '';
+  message: String = '';
   loading: boolean = false;
   error: string | null = null;
   constructor(private coursesService: CoursesService) {}
@@ -20,9 +20,9 @@ export class MajorDetailsComponent {
     this.loading = true;
     this.error = null;
     this.coursesService.getHelloWorld().subscribe(
-      {next: (response) => {
-        this.message = response.message;
-        console.log(response);
+      {next: (text) => {
+        this.message = text;
+        console.log(text);
         this.loading = false;
       },
       error: (error) => {
