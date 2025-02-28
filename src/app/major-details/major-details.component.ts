@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CoursesService } from '../courses.service';
 import { CommonModule } from '@angular/common';
 @Component({
