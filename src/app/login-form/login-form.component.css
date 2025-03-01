@@ -1,0 +1,38 @@
+#login {
+    display: flex;
+    flex-direction: column;
+    border: #000 solid 1px;
+    width: 50%;
+    margin: auto;
+}
+h2 {
+    border-bottom: #000 solid 1px;
+    text-align: center;
+}
+#log-in {
+    background-color: lightgreen;
+}
+#go-to-sign-up {
+    background-color: cyan;
+}
+#login-buttons {
+    text-align: center;
+}
+button {
+    margin: 1rem;
+    padding: 1rem;
+    border: #000 solid 1px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+label {
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+input {
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    padding: 0.5rem;
+}

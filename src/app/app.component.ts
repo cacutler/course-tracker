@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { RegistrationFormComponent } from './registration-form/registration-form.component';
 import { MajorDetailsComponent } from './major-details/major-details.component';
@@ -10,7 +9,7 @@ import { AppHeaderComponent } from './app-header/app-header.component';
 import { PlansComponent } from './plans/plans.component';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginFormComponent, RegistrationFormComponent, MajorDetailsComponent, AvailableCoursesComponent, FutureCoursesComponent, PassedCoursesComponent, AppHeaderComponent, PlansComponent],
+  imports: [LoginFormComponent, RegistrationFormComponent, MajorDetailsComponent, AvailableCoursesComponent, FutureCoursesComponent, PassedCoursesComponent, AppHeaderComponent, PlansComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

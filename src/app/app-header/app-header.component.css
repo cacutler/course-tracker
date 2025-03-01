@@ -1,15 +1,15 @@
 button {
     padding: 5px 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f8f8f8;
+    border: 1px solid #000;
+    border-radius: 10px;
     cursor: pointer;
     float: right;
     margin: 0rem 1rem;
+    background-color: rgb(251, 99, 119);
 }
 h1 {
     margin: 0;
-    padding: 0;
+    padding: 2rem 0;
     color: #333;
     text-align: center;
     border-bottom: #333 1px solid;
