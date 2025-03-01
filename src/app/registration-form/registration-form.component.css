@@ -3,7 +3,7 @@
     flex-direction: column;
     border: #000 solid 1px;
     width: 50%;
-    margin: auto;
+    margin: 1rem auto;
 }
 h2 {
     border-bottom: #000 solid 1px;
@@ -25,15 +25,31 @@ button {
     border: #000 solid 1px;
     border-radius: 10px;
     cursor: pointer;
+    box-shadow: 0 9px #999;
 }
 label {
     margin-top: 0.5rem;
     margin-right: 1rem;
     margin-left: 1rem;
+    font-weight: bold;
 }
 input {
     margin-bottom: 0.5rem;
     margin-right: 1rem;
     margin-left: 1rem;
     padding: 0.5rem;
+    background-color: lightgray;
+    border: #000 solid 1px;
+    border-radius: 5px;
+}
+input::placeholder {
+    color: #000;
+    opacity: 0.75;
+}
+button:hover {
+    background-color: salmon !important; /* Green */
+}
+button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
