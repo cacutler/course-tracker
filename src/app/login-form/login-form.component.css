@@ -48,7 +48,7 @@ input::placeholder {
     opacity: 0.75;
 }
 button:hover {
-    background-color: salmon !important; /* Green */
+    background-color: salmon !important;
 }
 button:active {
     box-shadow: 0 5px #666;

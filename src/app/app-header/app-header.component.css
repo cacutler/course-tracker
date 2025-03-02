@@ -6,6 +6,7 @@ button {
     float: right;
     margin: 0rem 1rem;
     background-color: rgb(251, 99, 119);
+    box-shadow: 0 9px #999;
 }
 h1 {
     margin: 0;
@@ -28,4 +29,12 @@ h1 {
     position: absolute;
     top: 1rem;
     right: 1rem;
+}
+button:hover {
+    background-color: red;
+    color: white;
+}
+button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
 }
