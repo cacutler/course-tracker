@@ -10,6 +10,7 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 ### Database Design
 
 **User Table:**
+- Document ID (String)
 - First Name (String) - required for account creation; this is the student's first name
 - Last Name (String) - required for account creation; this is the student's last name
 - Username (String) - required for account creation; this is the student's username
@@ -24,12 +25,14 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 - Available Courses (Array of Courses) - This is a list of available courses the student can take where courses are objects
 
 **Degree Table:**
+- Document ID (String)
 - Degree Title (String)
 - Degree Tracks (Array of Strings)
 - Required Courses (Array of Courses)
 - Default Plan (Plan)
 
 **Course Table:**
+- Document ID (String)
 - Course Title (String)
 - Course Number (String)
 - Prerequisite Courses (Array of Strings)
@@ -38,6 +41,7 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 - Credit Hours (Number)
 
 **Plan Table:**
+- Document ID (String)
 - Plan Title (String)
 - First Semester (Array of Strings)
 - Second Semester (Array of Strings)
