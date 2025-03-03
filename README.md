@@ -18,31 +18,31 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 - Track (String) - This is the student's major degree track if their chosen major requires a track
 - Credits (Number) - This is the number of credits the student has taken and passed
 - GPA (Number) - optional future feature; this is the student's GPA based on previous classes and grades
-- Plans (Array) - This is a list of plan JSON objects
-- Passed Courses (Array) - This is a list of passed courses the student has completed where courses are objects
-- Future Courses (Array) - This is a list of future courses required for the student's major where courses are objects
-- Available Courses (Array) - This is a list of available courses the student can take where courses are objects
+- Plans (Array of Plans) - This is a list of plan JSON objects
+- Passed Courses (Array of Courses) - This is a list of passed courses the student has completed where courses are objects
+- Future Courses (Array of Courses) - This is a list of future courses required for the student's major where courses are objects
+- Available Courses (Array of Courses) - This is a list of available courses the student can take where courses are objects
 
 **Degree Table:**
-- Degree Title
-- Degree Tracks
-- Required Courses
-- Default Plan
+- Degree Title (String)
+- Degree Tracks (Array of Strings)
+- Required Courses (Array of Courses)
+- Default Plan (Plan)
 
 **Course Object:**
-- Course Title
-- Course Number
-- Prerequisite Courses
-- Corequisite Courses
-- Semester Availability (Array)
+- Course Title (String)
+- Course Number (String)
+- Prerequisite Courses (Array of Strings)
+- Corequisite Courses (Array of Strings)
+- Semester Availability (Array of Strings)
 
 **Plan Object:**
-- Plan Title
-- First Semester
-- Second Semester
-- Third Semester
-- Fourth Semester
-- Fifth Semester
-- Sixth Semester
-- Seventh Semester
-- Eighth Semester
+- Plan Title (String)
+- First Semester (Array of Strings)
+- Second Semester (Array of Strings)
+- Third Semester (Array of Strings)
+- Fourth Semester (Array of Strings)
+- Fifth Semester (Array of Strings)
+- Sixth Semester (Array of Strings)
+- Seventh Semester (Array of Strings)
+- Eighth Semester (Array of Strings)
