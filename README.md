@@ -39,6 +39,7 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 - Corequisite Courses (Array of Strings)
 - Semester Availability (Array of Strings)
 - Credit Hours (Number)
+- C.E. Class (String)
 
 **Plan Table:**
 - Document ID (String)
