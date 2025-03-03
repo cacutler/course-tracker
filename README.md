@@ -29,14 +29,15 @@ https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p
 - Required Courses (Array of Courses)
 - Default Plan (Plan)
 
-**Course Object:**
+**Course Table:**
 - Course Title (String)
 - Course Number (String)
 - Prerequisite Courses (Array of Strings)
 - Corequisite Courses (Array of Strings)
 - Semester Availability (Array of Strings)
+- Credit Hours (Number)
 
-**Plan Object:**
+**Plan Table:**
 - Plan Title (String)
 - First Semester (Array of Strings)
 - Second Semester (Array of Strings)
