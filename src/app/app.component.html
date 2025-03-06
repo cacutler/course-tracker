@@ -12,9 +12,9 @@
         <app-future-courses></app-future-courses>
     </div>
 </div>
-<div id="login-container">
+<div id="login-container" *ngIf="authenticated">
     <app-login-form></app-login-form>
 </div>
-<div id="registration-container">
+<div id="registration-container" *ngIf="authenticated">
     <app-registration-form></app-registration-form>
 </div>
