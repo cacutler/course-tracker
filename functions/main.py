@@ -38,8 +38,44 @@ def get_degree_data(req: https_fn.Request) -> https_fn.Response:
         'Access-Control-Allow-Origin': '*'
     }
     try:
-        degrees = firestore.client().collection("degrees").get()
-        data = [degree.to_dict() for degree in degrees]
-        return https_fn.Response(json.dumps(data), mimetype="application/json", headers=headers)
+        db = firestore.client()
+        
+        # Get degrees
+        degrees = db.collection("degrees").get()
+        degrees_data = []
+        
+        # Process each degree document
+        for degree in degrees:
+            degree_dict = degree.to_dict()
+            
+            # Make a copy of the degree data that we can modify
+            serializable_degree = {}
+            
+            # Process all fields in the degree
+            for key, value in degree_dict.items():
+                # Handle fields that might contain document references
+                if isinstance(value, list) and key in ["PassedCourses", "AvailableCourses", "FutrueCourses"]:
+                    # Add course data
+                    course_data = []
+                    for course_ref in value:
+                        try:
+                            course_doc = course_ref.get()
+                            if course_doc.exists:
+                                course_data.append(course_doc.to_dict())
+                        except Exception as e:
+                            print(f"Error fetching course: {e}")
+                    
+                    # Add the course data to our serializable object
+                    serializable_degree[f"{key}Data"] = course_data
+                    
+                    # Convert references to strings for the original list
+                    serializable_degree[key] = [ref.path for ref in value]
+                else:
+                    # For non-reference fields, copy as-is
+                    serializable_degree[key] = value
+            
+            degrees_data.append(serializable_degree)
+        
+        return https_fn.Response(json.dumps(degrees_data), mimetype="application/json", headers=headers)
     except Exception as e:
         return https_fn.Response(f"Error: {e}", status=500)
