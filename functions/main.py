@@ -54,22 +54,35 @@ def get_degree_data(req: https_fn.Request) -> https_fn.Response:
             # Process all fields in the degree
             for key, value in degree_dict.items():
                 # Handle fields that might contain document references
-                if isinstance(value, list) and key in ["PassedCourses", "AvailableCourses", "FutrueCourses"]:
+                if isinstance(value, list) and key in ["PassedCourses", "AvailableCourses", "FutureCourses"]:
                     # Add course data
                     course_data = []
+                    ref_paths = []
+                    
                     for course_ref in value:
+                        # Skip None values
+                        if course_ref is None:
+                            ref_paths.append(None)
+                            continue
+                            
                         try:
-                            course_doc = course_ref.get()
-                            if course_doc.exists:
-                                course_data.append(course_doc.to_dict())
+                            # Add reference path
+                            ref_paths.append(course_ref.path if hasattr(course_ref, 'path') else str(course_ref))
+                            
+                            # Get and add course data
+                            if hasattr(course_ref, 'get'):
+                                course_doc = course_ref.get()
+                                if course_doc.exists:
+                                    course_data.append(course_doc.to_dict())
                         except Exception as e:
-                            print(f"Error fetching course: {e}")
+                            print(f"Error processing reference: {e}")
+                            ref_paths.append(str(course_ref))
                     
                     # Add the course data to our serializable object
                     serializable_degree[f"{key}Data"] = course_data
                     
-                    # Convert references to strings for the original list
-                    serializable_degree[key] = [ref.path for ref in value]
+                    # Store the reference paths
+                    serializable_degree[key] = ref_paths
                 else:
                     # For non-reference fields, copy as-is
                     serializable_degree[key] = value
