@@ -1,6 +1,9 @@
 <div id="passed-courses">
     <h3>Passed Courses</h3>
     <ul>
-        <li>test cs-1400</li>
+        <li *ngFor="let course of passedCourses">
+            {{course.Title}} - {{course.Number}}
+        </li>
+        <li *ngIf="passedCourses.length === 0">No passed courses found</li>
     </ul>
 </div>

@@ -5,3 +5,18 @@
     margin: 0rem 2rem;
     padding: 0.25rem;
 }
+.track-selector {
+    margin: 0.5rem 0;
+}
+.track-selector select {
+    padding: 0.3rem;
+    margin-left: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+}
+.track-selector select:focus { /* Optional: Style for better visual appearance */
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 3px rgba(74, 144, 226, 0.5);
+}

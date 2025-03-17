@@ -1,16 +1,12 @@
 <div id="major-details">
-    <div *ngIf="loading">
-        <p>Loading message from Firebase...</p>
-    </div>
-    <div *ngIf="error">
-        <p>{{error}}</p>
-        <button (click)="retry()">Try Again</button>
-    </div>
-    <div *ngIf="!loading && !error">
-        <h3>{{message}}</h3>
-    </div>
     <p><b>GPA: 4.0</b></p>
-    <p><b>Major: </b></p>
-    <p><b>Track: </b></p>
+    <p><b>Major: </b>{{degreeTitle}}</p>
+    <div *ngIf="tracks.length > 0" class="track-selector">
+        <label for="track-select"><b>Track: </b></label>
+        <select id="track-select" [(ngModel)]="selectedTrack" (change)="onTrackChange()">
+            <option *ngFor="let track of tracks" [value]="track">{{track}}</option>
+        </select>
+    </div>
+    <p *ngIf="tracks.length === 0"><b>Track: </b>None available</p>
     <p><b>Credits: 120</b></p>
 </div>

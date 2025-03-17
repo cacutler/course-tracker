@@ -5,10 +5,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CoursesService {
-  private firebaseFunctionUrl = 'https://on-request-example-tt4sagcvnq-uc.a.run.app';
+  private degreeDataUrl = 'https://get-degree-data-tt4sagcvnq-uc.a.run.app'
   constructor(private http: HttpClient) {}
-  getHelloWorld(): Observable<string> {
-    // Specify response type as text, not the default JSON
-    return this.http.get(this.firebaseFunctionUrl, { responseType: 'text' });
+  getDegreeData(): Observable<any[]> {
+    return this.http.get<any[]>(this.degreeDataUrl);
   }
 }

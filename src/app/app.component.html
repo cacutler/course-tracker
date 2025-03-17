@@ -1,4 +1,11 @@
 <app-app-header></app-app-header>
+<div *ngIf="loading" class="loading-overlay">
+    <div class="loading-spinner">Loading course data...</div>
+</div>
+<div *ngIf="error" class="error-message">
+    <p>{{error}}</p>
+    <button (click)="fetchDegreeData()">Try Again</button>
+</div>
 <app-major-details></app-major-details>
 <div id="container">
     <div id="left">

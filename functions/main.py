@@ -6,20 +6,6 @@ from firebase_admin import initialize_app, firestore
 import json
 initialize_app()
 @https_fn.on_request()
-def on_request_example(req: https_fn.Request) -> https_fn.Response:
-    if req.method == 'OPTIONS':
-        headers = { # Set CORS headers for preflight requests
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '3600'
-        }
-        return https_fn.Response("", status=204, headers=headers)
-    headers = { # Set CORS headers for main requests
-        'Access-Control-Allow-Origin': '*'
-    }
-    return https_fn.Response("Hello world!", headers=headers)  # Your actual function logic
-@https_fn.on_request()
 def get_degree_data(req: https_fn.Request) -> https_fn.Response:
     if req.method == 'OPTIONS': # Set CORS headers for preflight requests
         headers = {

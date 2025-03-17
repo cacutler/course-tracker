@@ -1,6 +1,9 @@
 <div id="available-courses">
     <h3>Available Courses</h3>
     <ul>
-        <li>test math-1210</li>
+        <li *ngFor="let course of availableCourses">
+            {{course.Title}} - {{course.Number}} ({{course.CreditHours}} credits)
+        </li>
+        <li *ngIf="availableCourses.length === 0">No available courses found</li>
     </ul>
 </div>

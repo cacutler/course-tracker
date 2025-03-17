@@ -1,37 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CoursesService } from '../courses.service';
 import { CommonModule } from '@angular/common';
+import { SharedDataService } from '../shared-data.service';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-major-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './major-details.component.html',
   styleUrl: './major-details.component.css'
 })
-export class MajorDetailsComponent {
-  message: String = '';
-  loading: boolean = false;
-  error: string | null = null;
-  constructor(private coursesService: CoursesService) {}
+export class MajorDetailsComponent implements OnInit {
+  degreeTitle: string = '';
+  tracks: string[] = [];
+  selectedTrack: string = '';
+  constructor(private coursesService: CoursesService, private sharedDataService: SharedDataService) {}
   ngOnInit(): void {
-    this.fetchHelloWorld();
+    this.loadDegreeData();
   }
-  fetchHelloWorld(): void {
-    this.loading = true;
-    this.error = null;
-    this.coursesService.getHelloWorld().subscribe(
-      {next: (text) => {
-        this.message = text;
-        console.log(text);
-        this.loading = false;
-      },
-      error: (error) => {
-        this.error = error;
-        this.loading = false;
-      }}
-    );
+  loadDegreeData(): void {
+    this.sharedDataService.degreeData$.subscribe(data => {
+      if (data && data.length > 0) {
+        this.degreeTitle = data[0].Title || '';
+        this.tracks = data[0].Tracks || [];
+        if (this.tracks.length > 0) {
+          this.selectedTrack = this.tracks[0];
+        }
+      }
+    });
   }
-  retry(): void {
-    this.fetchHelloWorld();
+  onTrackChange(): void { // Notify other components about track change if needed
+    this.sharedDataService.updateSelectedTrack(this.selectedTrack);
+    console.log('Selected track:', this.selectedTrack);
   }
 }

@@ -1,6 +1,9 @@
 <div id="future-courses">
     <h3>Future Courses</h3>
     <ul>
-        <li>test math-1210</li>
+        <li *ngFor="let course of futureCourses">
+            {{course.Title}} - {{course.Number}}
+        </li>
+        <li *ngIf="futureCourses.length === 0">No future courses planned</li>
     </ul>
 </div>
