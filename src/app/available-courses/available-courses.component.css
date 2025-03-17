@@ -14,3 +14,18 @@ h3 {
     padding: 0;
     border-bottom: #000 solid 1px;
 }
+.move-button {
+    padding: 3px 6px;
+    border: 1px solid #000;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 8px;
+    background-color: #2196F3;
+    color: white;
+}
+.move-button:hover {
+    background-color: #0b7dda;
+}
+.move-button:active {
+    transform: translateY(1px);
+}
