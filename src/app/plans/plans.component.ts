@@ -8,7 +8,7 @@ import { SharedDataService } from '../shared-data.service';
   styleUrl: './plans.component.css'
 })
 export class PlansComponent implements OnInit {
-  plans: any[] = [];
+  defaultPlans: any[] = [];
   constructor(private sharedDataService: SharedDataService) {}
   ngOnInit(): void {
     this.loadPlans();
@@ -17,7 +17,7 @@ export class PlansComponent implements OnInit {
     this.sharedDataService.degreeData$.subscribe(data => {
       if (data && data.length > 0 && data[0].DefaultPlans) {
         // If DefaultPlans contains actual plan data
-        this.plans = data[0].DefaultPlans.filter((plan: any) => plan !== null);
+        this.defaultPlans = data[0].DefaultPlansData;
       }
     });
   }

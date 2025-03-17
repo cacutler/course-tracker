@@ -1,9 +1,9 @@
 <div id="plans">
-    <h3>Plans</h3>
+    <h3>Default Plans</h3>
     <ul>
-        <li *ngFor="let plan of plans">
-            {{plan.title}}
+        <li *ngFor="let plan of defaultPlans">
+            {{plan.Title}}
         </li>
-        <li *ngIf="plans.length === 0">No plans available</li>
+        <li *ngIf="defaultPlans.length === 0">No default plans available</li>
     </ul>
 </div>
