@@ -17,3 +17,14 @@ li {
     border: #000 solid 1px;
     background-color: rgb(73, 104, 243);
 }
+.prerequisites {
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    color: #fff;
+    font-style: italic;
+}
+.label {
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 0.5rem;
+}

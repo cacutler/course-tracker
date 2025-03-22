@@ -3,6 +3,12 @@
     <ul>
         <li *ngFor="let course of futureCourses">
             {{course.Title}} - {{course.Number}}
+            <p class="label">Prerequisites:</p>
+            <ul>
+                <li *ngFor="let prerequisite of course.Prerequisites" class="prerequisites">
+                    {{prerequisite}}
+                </li>
+            </ul>
         </li>
         <li *ngIf="futureCourses.length === 0">No future courses planned</li>
     </ul>

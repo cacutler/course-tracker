@@ -29,3 +29,13 @@ h3 {
 .move-button:active {
     transform: translateY(1px);
 }
+.label {
+    font-weight: bold;
+    text-decoration: underline;
+    margin: 0.5rem;
+}
+.semesters {
+    font-size: 0.8rem;
+    color: #fff;
+    font-style: italic;
+}
