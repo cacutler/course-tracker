@@ -28,3 +28,9 @@ li {
     text-decoration: underline;
     margin: 0.5rem;
 }
+.text-green {
+    color: #00ff00;
+}
+.text-red {
+    color: #ff0000;
+}

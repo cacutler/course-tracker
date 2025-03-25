@@ -9,6 +9,13 @@
                     {{prerequisite}}
                 </li>
             </ul>
+            <p class="prerequisites" 
+               [ngClass]="{
+                   'text-green': hasCompletedAllPrerequisites(course),
+                   'text-red': !hasCompletedAllPrerequisites(course)
+               }">
+                Status: {{getPrerequisiteStatus(course)}}
+            </p>
         </li>
         <li *ngIf="futureCourses.length === 0">No future courses planned</li>
     </ul>

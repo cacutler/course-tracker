@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedDataService } from '../shared-data.service';
+interface Course {
+  Title: string;
+  CreditHours: number;
+  Number: string;
+  Prerequisites?: string[];
+  SemesterAvailability: string[];
+}
 @Component({
   selector: 'app-passed-courses',
   imports: [CommonModule],
@@ -8,7 +15,7 @@ import { SharedDataService } from '../shared-data.service';
   styleUrl: './passed-courses.component.css'
 })
 export class PassedCoursesComponent implements OnInit {
-  passedCourses: any[] = [];
+  passedCourses: Course[] = [];
   courseRefs: { [key: string]: string } = {}; // Map course numbers to refs
   constructor(private sharedDataService: SharedDataService) {}
   ngOnInit(): void {
