@@ -19,13 +19,15 @@ export class FutureCoursesComponent implements OnInit {
   futureCourses: Course[] = [];
   completedCourses: string[] = [];
   completedCourseObjects: any[] = [];
+  availableCourses: any[] = [];
   constructor(private sharedDataService: SharedDataService) {}
   ngOnInit(): void {
     combineLatest([
       this.sharedDataService.degreeData$,
       this.sharedDataService.passedCoursesRefs$,
-      this.sharedDataService.passedCourses$
-    ]).subscribe(([degreeData, completedRefs, completedObjects]) => {
+      this.sharedDataService.passedCourses$,
+      this.sharedDataService.availableCourses$
+    ]).subscribe(([degreeData, completedRefs, completedObjects, availableCourses]) => {
       // Load future courses
       if (degreeData && degreeData.length > 0 && degreeData[0].FutureCoursesData) {
         this.futureCourses = degreeData[0].FutureCoursesData;
@@ -33,6 +35,8 @@ export class FutureCoursesComponent implements OnInit {
       // Track completed course references and objects
       this.completedCourses = completedRefs || [];
       this.completedCourseObjects = completedObjects || [];
+      this.availableCourses = availableCourses || [];
+      this.moveEligibleCoursesToAvailable(); // Automatically move eligible courses to available
     });
   }
   hasCompletedAllPrerequisites(course: Course): boolean {
@@ -57,6 +61,17 @@ export class FutureCoursesComponent implements OnInit {
       prerequisite.includes(completedCourse.Number)
     );
     return refMatch || objectMatch;
+  }
+  moveEligibleCoursesToAvailable(): void {
+    const eligibleCourses = this.futureCourses.filter(course => // Find courses that are eligible and not already in available courses
+      this.hasCompletedAllPrerequisites(course) &&
+      !this.availableCourses.some(availableCourse => 
+        availableCourse.Number === course.Number
+      )
+    );
+    eligibleCourses.forEach(course => { // Move each eligible course to available
+      this.sharedDataService.moveToAvailable(course, course.Number); // Assuming you want to use the course's number as the reference
+    });
   }
   getPrerequisiteStatus(course: Course): string {
     if (this.hasCompletedAllPrerequisites(course)) {
