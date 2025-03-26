@@ -36,7 +36,10 @@ export class FutureCoursesComponent implements OnInit {
       this.completedCourses = completedRefs || [];
       this.completedCourseObjects = completedObjects || [];
       this.availableCourses = availableCourses || [];
-      this.moveEligibleCoursesToAvailable(); // Automatically move eligible courses to available
+      // Only move eligible courses if not already done
+      if (this.futureCourses.length > 0) {
+        this.moveEligibleCoursesToAvailable();
+      }
     });
   }
   hasCompletedAllPrerequisites(course: Course): boolean {
@@ -63,15 +66,17 @@ export class FutureCoursesComponent implements OnInit {
     return refMatch || objectMatch;
   }
   moveEligibleCoursesToAvailable(): void {
-    const eligibleCourses = this.futureCourses.filter(course => // Find courses that are eligible and not already in available courses
+    const eligibleCourses = this.futureCourses.filter(course => 
       this.hasCompletedAllPrerequisites(course) &&
       !this.availableCourses.some(availableCourse => 
         availableCourse.Number === course.Number
       )
     );
-    eligibleCourses.forEach(course => { // Move each eligible course to available
-      this.sharedDataService.moveToAvailable(course, course.Number); // Assuming you want to use the course's number as the reference
-    });
+
+    // Use a simple loop instead of forEach to reduce complexity
+    for (const course of eligibleCourses) {
+      this.sharedDataService.moveFromFutureToAvailable(course, course.Number);
+    }
   }
   getPrerequisiteStatus(course: Course): string {
     if (this.hasCompletedAllPrerequisites(course)) {
