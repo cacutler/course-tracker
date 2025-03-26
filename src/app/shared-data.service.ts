@@ -68,37 +68,55 @@ export class SharedDataService {
   getCurrentTrack(): string {
     return this.selectedTrackSubject.getValue();
   }
-  moveToPassed(course: Course, courseRef: string) { // Methods to move courses between lists
-    const availableCourses = this.availableCoursesSubject.getValue(); // Handle data
-    const passedCourses = this.passedCoursesSubject.getValue();
-    const updatedAvailable = availableCourses.filter(c => c.Number !== course.Number);
-    const courseExists = passedCourses.some(c => c.Number === course.Number);
-    const updatedPassed = courseExists ? passedCourses : [...passedCourses, course];
-    this.availableCoursesSubject.next(updatedAvailable);
-    this.passedCoursesSubject.next(updatedPassed);
-    const availableRefs = this.availableCoursesRefsSubject.getValue(); // Handle references
-    const passedRefs = this.passedCoursesRefsSubject.getValue();
-    const updatedAvailableRefs = availableRefs.filter(ref => ref !== courseRef);
-    const refExists = passedRefs.includes(courseRef);
-    const updatedPassedRefs = refExists ? passedRefs : [...passedRefs, courseRef];
-    this.availableCoursesRefsSubject.next(updatedAvailableRefs);
-    this.passedCoursesRefsSubject.next(updatedPassedRefs);
+  moveToPassed(course: any, courseRef: string) {
+    // Prevent duplicate entries
+    const currentPassedCourses = this.passedCoursesSubject.getValue();
+    const currentPassedRefs = this.passedCoursesRefsSubject.getValue();
+    
+    // Only add if not already passed
+    if (!currentPassedCourses.some(c => c.Number === course.Number)) {
+      // Remove from available courses
+      const availableCourses = this.availableCoursesSubject.getValue();
+      const updatedAvailableCourses = availableCourses.filter(c => c.Number !== course.Number);
+      this.availableCoursesSubject.next(updatedAvailableCourses);
+      
+      // Add to passed courses
+      const updatedPassedCourses = [...currentPassedCourses, course];
+      this.passedCoursesSubject.next(updatedPassedCourses);
+      
+      // Update references
+      const updatedAvailableRefs = this.availableCoursesRefsSubject.getValue()
+        .filter(ref => ref !== courseRef);
+      const updatedPassedRefs = [...currentPassedRefs, courseRef];
+      
+      this.availableCoursesRefsSubject.next(updatedAvailableRefs);
+      this.passedCoursesRefsSubject.next(updatedPassedRefs);
+    }
   }
-  moveToAvailable(course: Course, courseRef: string) {
-    const availableCourses = this.availableCoursesSubject.getValue(); // Handle data
-    const passedCourses = this.passedCoursesSubject.getValue();
-    const updatedPassed = passedCourses.filter(c => c.Number !== course.Number);
-    const courseExists = availableCourses.some(c => c.Number === course.Number);
-    const updatedAvailable = courseExists ? availableCourses : [...availableCourses, course];
-    this.passedCoursesSubject.next(updatedPassed);
-    this.availableCoursesSubject.next(updatedAvailable);
-    const availableRefs = this.availableCoursesRefsSubject.getValue(); // Handle references
-    const passedRefs = this.passedCoursesRefsSubject.getValue();
-    const updatedPassedRefs = passedRefs.filter(ref => ref !== courseRef);
-    const refExists = availableRefs.includes(courseRef);
-    const updatedAvailableRefs = refExists ? availableRefs : [...availableRefs, courseRef];
-    this.passedCoursesRefsSubject.next(updatedPassedRefs);
-    this.availableCoursesRefsSubject.next(updatedAvailableRefs);
+  moveToAvailable(course: any, courseRef: string) {
+    // Prevent duplicate entries
+    const currentAvailableCourses = this.availableCoursesSubject.getValue();
+    const currentAvailableRefs = this.availableCoursesRefsSubject.getValue();
+    
+    // Only add if not already available
+    if (!currentAvailableCourses.some(c => c.Number === course.Number)) {
+      // Remove from passed or future courses
+      const passedCourses = this.passedCoursesSubject.getValue();
+      const updatedPassedCourses = passedCourses.filter(c => c.Number !== course.Number);
+      this.passedCoursesSubject.next(updatedPassedCourses);
+      
+      // Add to available courses
+      const updatedAvailableCourses = [...currentAvailableCourses, course];
+      this.availableCoursesSubject.next(updatedAvailableCourses);
+      
+      // Update references
+      const updatedPassedRefs = this.passedCoursesRefsSubject.getValue()
+        .filter(ref => ref !== courseRef);
+      const updatedAvailableRefs = [...currentAvailableRefs, courseRef];
+      
+      this.passedCoursesRefsSubject.next(updatedPassedRefs);
+      this.availableCoursesRefsSubject.next(updatedAvailableRefs);
+    }
   }
   moveFromFutureToAvailable(course: Course, courseRef: string) { // Move a course from future to available
     const futureCourses = this.futureCoursesSubject.getValue();
