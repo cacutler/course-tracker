@@ -26,11 +26,12 @@ export class FutureCoursesComponent implements OnInit {
       this.sharedDataService.degreeData$,
       this.sharedDataService.passedCoursesRefs$,
       this.sharedDataService.passedCourses$,
-      this.sharedDataService.availableCourses$
-    ]).subscribe(([degreeData, completedRefs, completedObjects, availableCourses]) => {
+      this.sharedDataService.availableCourses$,
+      this.sharedDataService.futureCourses$ // Add this to track future courses
+    ]).subscribe(([degreeData, completedRefs, completedObjects, availableCourses, futureCourses]) => {
       // Load future courses
-      if (degreeData && degreeData.length > 0 && degreeData[0].FutureCoursesData) {
-        this.futureCourses = degreeData[0].FutureCoursesData;
+      if (futureCourses && futureCourses.length > 0) {
+        this.futureCourses = futureCourses;
       }
       // Track completed course references and objects
       this.completedCourses = completedRefs || [];

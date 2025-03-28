@@ -37,9 +37,9 @@ export class SharedDataService {
       if (data[0].AvailableCoursesData) {
         this.availableCoursesSubject.next([...data[0].AvailableCoursesData]);
       }
-      if (data[0].FutureCoursesData) {
-        this.futureCoursesSubject.next([data[0].FutureCoursesData]);
-        this.buildPrerequisiteMap(data[0].FutureCoursesData); // Initialize prerequisite map
+      if (data[0].FutureCoursesData) { // Use the data directly, not wrapped in an array
+        this.futureCoursesSubject.next(data[0].FutureCoursesData);
+        this.buildPrerequisiteMap(data[0].FutureCoursesData);
       }
       if (data[0].PassedCourses) { // Initialize course references
         this.passedCoursesRefsSubject.next([...data[0].PassedCourses.filter((ref: any) => ref !== null)]);
