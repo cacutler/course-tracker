@@ -72,30 +72,23 @@ export class SharedDataService {
     // Prevent duplicate entries
     const currentPassedCourses = this.passedCoursesSubject.getValue();
     const currentPassedRefs = this.passedCoursesRefsSubject.getValue();
-    
     // Only add if not already passed
     if (!currentPassedCourses.some(c => c.Number === course.Number)) {
       // Remove from available courses
       const availableCourses = this.availableCoursesSubject.getValue();
       const updatedAvailableCourses = availableCourses.filter(c => c.Number !== course.Number);
       this.availableCoursesSubject.next(updatedAvailableCourses);
-      
       // Remove from future courses (in case it's still there)
       const futureCourses = this.futureCoursesSubject.getValue();
       const updatedFutureCourses = futureCourses.filter(c => c.Number !== course.Number);
       this.futureCoursesSubject.next(updatedFutureCourses);
-      
       // Add to passed courses
       const updatedPassedCourses = [...currentPassedCourses, course];
       this.passedCoursesSubject.next(updatedPassedCourses);
-      
       // Update references
-      const updatedAvailableRefs = this.availableCoursesRefsSubject.getValue()
-        .filter(ref => ref !== courseRef);
-      const updatedFutureRefs = this.futureCoursesRefsSubject.getValue()
-        .filter(ref => ref !== courseRef);
+      const updatedAvailableRefs = this.availableCoursesRefsSubject.getValue().filter(ref => ref !== courseRef);
+      const updatedFutureRefs = this.futureCoursesRefsSubject.getValue().filter(ref => ref !== courseRef);
       const updatedPassedRefs = [...currentPassedRefs, courseRef];
-      
       this.availableCoursesRefsSubject.next(updatedAvailableRefs);
       this.futureCoursesRefsSubject.next(updatedFutureRefs);
       this.passedCoursesRefsSubject.next(updatedPassedRefs);
@@ -130,27 +123,18 @@ export class SharedDataService {
   moveFromFutureToAvailable(course: Course, courseRef: string) { // Move a course from future to available
     const futureCourses = this.futureCoursesSubject.getValue();
     const availableCourses = this.availableCoursesSubject.getValue();
-    
     // Remove the course from future courses
     const updatedFuture = futureCourses.filter(c => c.Number !== course.Number);
     this.futureCoursesSubject.next(updatedFuture);
-    
     // Add to available courses only if not already present
     const courseExists = availableCourses.some(c => c.Number === course.Number);
-    const updatedAvailable = courseExists 
-      ? availableCourses 
-      : [...availableCourses, course];
+    const updatedAvailable = courseExists ? availableCourses : [...availableCourses, course];
     this.availableCoursesSubject.next(updatedAvailable);
-    
     // Update references
     const futureRefs = this.futureCoursesRefsSubject.getValue();
     const availableRefs = this.availableCoursesRefsSubject.getValue();
-    
     const updatedFutureRefs = futureRefs.filter(ref => ref !== courseRef);
-    const updatedAvailableRefs = courseRef && !availableRefs.includes(courseRef)
-      ? [...availableRefs, courseRef]
-      : availableRefs;
-    
+    const updatedAvailableRefs = courseRef && !availableRefs.includes(courseRef) ? [...availableRefs, courseRef] : availableRefs;
     this.futureCoursesRefsSubject.next(updatedFutureRefs);
     this.availableCoursesRefsSubject.next(updatedAvailableRefs);
   }
@@ -166,7 +150,6 @@ export class SharedDataService {
         const allPrerequisitesMet = prerequisites.every(prereq => 
           passedCourseNumbers.has(prereq)
         );
-        
         if (allPrerequisitesMet && index < futureRefs.length) {
           coursesToMove.push({ 
             course, 
