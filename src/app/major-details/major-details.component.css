@@ -20,3 +20,16 @@
     border-color: #4a90e2;
     box-shadow: 0 0 3px rgba(74, 144, 226, 0.5);
 }
+button {
+    display: block; 
+    margin: 0rem auto;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border: 1px solid #000;
+    border-radius: 10px;
+    background-color: #0b7dda;
+    color: white;
+}
+button:active {
+    transform: translateY(1px);
+}
