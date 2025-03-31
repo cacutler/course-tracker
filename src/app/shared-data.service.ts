@@ -53,7 +53,7 @@ export class SharedDataService {
         this.futureCoursesRefsSubject.next([...data[0].FutureCourses.filter((ref: any) => ref !== null)]);
       }
       if (data[0].Tracks && data[0].Tracks.length > 0) { // Initialize track
-        this.selectedTrackSubject.next(data[0].Tracks[0]);
+        this.updateSelectedTrack(data[0].Tracks[0]);
       }
     }
   }
