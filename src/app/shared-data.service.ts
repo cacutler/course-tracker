@@ -138,37 +138,6 @@ export class SharedDataService {
     this.futureCoursesRefsSubject.next(updatedFutureRefs);
     this.availableCoursesRefsSubject.next(updatedAvailableRefs);
   }
-  private checkPrerequisitesForFutureCourses() { // Check prerequisites for all future courses
-    const passedCourses = this.passedCoursesSubject.getValue();
-    const futureCourses = this.futureCoursesSubject.getValue();
-    const futureRefs = this.futureCoursesRefsSubject.getValue();
-    const passedCourseNumbers = new Set(passedCourses.map(course => course.Number)); // Get all passed course numbers as a set for quick lookup
-    const coursesToMove: { course: Course, ref: string }[] = []; // Track courses to move
-    futureCourses.forEach((course, index) => { // Check each future course
-      const prerequisites = this.prerequisiteMap.get(course.Number) || [];
-      if (prerequisites.length > 0) { // If the course has prerequisites, check if they're all passed
-        const allPrerequisitesMet = prerequisites.every(prereq => 
-          passedCourseNumbers.has(prereq)
-        );
-        if (allPrerequisitesMet && index < futureRefs.length) {
-          coursesToMove.push({ 
-            course, 
-            ref: futureRefs[index] || this.findCourseRef(course.Number)
-          });
-        }
-      } else {
-        if (index < futureRefs.length) { // If there are no prerequisites, the course can be moved to available.  Only if it's not there already
-          coursesToMove.push({ 
-            course, 
-            ref: futureRefs[index] || this.findCourseRef(course.Number)
-          });
-        }
-      }
-    });
-    coursesToMove.forEach(item => { // Move eligible courses to available
-      this.moveFromFutureToAvailable(item.course, item.ref);
-    });
-  }
   private findCourseRef(courseNumber: string): string { // Helper method to generate a reference pattern if one isn't available
     return `courses/${courseNumber.toLowerCase().replace('-', '')}`;
   }

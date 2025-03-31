@@ -2,8 +2,7 @@
     <h3>Passed Courses</h3>
     <ul>
         <li *ngFor="let course of passedCourses">
-            {{course.Title}} - {{course.Number}}
-            <button (click)="markAsAvailable(course)" class="move-button">→</button>
+            {{course.Title}} - {{course.Number}} ({{course.CreditHours}} credits)
         </li>
         <li *ngIf="passedCourses.length === 0">No passed courses found</li>
     </ul>

@@ -38,11 +38,4 @@ export class PassedCoursesComponent implements OnInit {
       }
     });
   }
-  markAsAvailable(course: any): void {
-    const courseRef = this.courseRefs[course.Number] || this.findCourseRef(course.Number);
-    this.sharedDataService.moveToAvailable(course, courseRef);
-  }
-  private findCourseRef(courseNumber: string): string { // Helper method to find course reference if mapping isn't available
-    return `courses/${courseNumber.toLowerCase().replace('-', '')}`; // Default to a pattern based on the course number if we can't find the actual reference
-  }
 }
