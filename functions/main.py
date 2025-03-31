@@ -1,13 +1,21 @@
-from firebase_functions import https_fn
-from firebase_admin import initialize_app, firestore, credentials
+from firebase_functions import https_fn, firestore_fn, options
+from firebase_admin import initialize_app, firestore
 import json
 from google.cloud.firestore_v1.document import DocumentReference
-cred = credentials.ApplicationDefault()
-initialize_app(cred)
-from firebase_functions import firestore_fn, options
-from firebase_functions.firestore_fn import (Event, FirestoreEvent, DocumentSnapshot, Change)
+try:
+    # Try to initialize with default project
+    initialize_app()
+except ValueError:
+    # If that fails, initialize with no arguments for emulator use
+    initialize_app(options={'projectId': 'demo-project'})
+from firebase_functions.firestore_fn import Event, DocumentSnapshot, Change
 options.set_global_options(region=options.SupportedRegion.US_CENTRAL1)
-db = firestore.client()
+db = None
+def get_db():
+    global db
+    if db is None:
+        db = firestore.client()
+    return db
 class FirestoreEncoder(json.JSONEncoder): # Custom JSON encoder to handle Firestore objects
     def default(self, obj):
         if isinstance(obj, DocumentReference):
@@ -62,8 +70,8 @@ def process_reference_list(key, value, result_dict): # Helper function to proces
             print(f"Error processing reference in {key}: {e}")
     result_dict[f"{key}Data"] = data_list # Add the data to our result
     result_dict[key] = value  # Let the encoder handle the original references
-@https_fn.on_document_written(document="degrees/{degreeId}")
-def ondegreedataupdated(event: FirestoreEvent[Change[DocumentSnapshot], dict]):
+@firestore_fn.on_document_written(document="degrees/{degreeId}")
+def ondegreedataupdated(event: Event[Change[DocumentSnapshot], dict]):
     """
     This function is triggered when a document in the 'degrees' collection is created, updated, or deleted.
     It logs the event and saves the data to Firestore.
