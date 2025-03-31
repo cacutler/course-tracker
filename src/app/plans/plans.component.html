@@ -1,9 +1,69 @@
 <div id="plans">
     <h3>Plans</h3>
-    <h4>Default Plans</h4>
+    <h4>Default Plan</h4>
     <ul>
         <li *ngFor="let plan of defaultPlans">
             {{plan.Title}}
+            <div id="fall">
+                <p><b><small>First Fall Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.FirstFallSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.FirstFallSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Second Fall Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.SecondFallSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.SecondFallSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Third Fall Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.ThirdFallSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.ThirdFallSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Fourth Fall Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.FourthFallSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.FourthFallSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+            </div>
+            <div id="spring">
+                <p><b><small>First Spring Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.FirstSpringSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.FirstSpringSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Second Spring Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.SecondSpringSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.SecondSpringSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Third Spring Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.ThirdSpringSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.ThirdSpringSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+                <p><b><small>Fourth Spring Semester</small></b></p>
+                <ul>
+                    <li *ngFor="let course of plan.FourthSpringSemester">
+                        <small>{{course}}</small>
+                    </li>
+                    <li *ngIf="plan.FourthSpringSemester[0] == null"><small>No courses planned</small></li>
+                </ul>
+            </div>
         </li>
         <li *ngIf="defaultPlans.length === 0">No default plans for this track</li>
     </ul>

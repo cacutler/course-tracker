@@ -14,3 +14,17 @@ h3 {
     padding: 0;
     border-bottom: #000 solid 1px;
 }
+#fall {
+    float: left;
+    position: relative;
+    left: 10rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+#spring {
+    float: right;
+    position: relative;
+    right: 10rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
