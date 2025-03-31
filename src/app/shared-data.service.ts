@@ -15,6 +15,8 @@ export class SharedDataService {
   public degreeData$ = this.degreeDataSubject.asObservable();
   private selectedTrackSubject = new BehaviorSubject<string>('');
   public selectedTrack$ = this.selectedTrackSubject.asObservable();
+  private filteredPlansSubject = new BehaviorSubject<any[]>([]);
+  public filteredPlans$ = this.filteredPlansSubject.asObservable();
   private passedCoursesSubject = new BehaviorSubject<Course[]>([]); // Keep the original subjects for backward compatibility
   public passedCourses$ = this.passedCoursesSubject.asObservable();
   private availableCoursesSubject = new BehaviorSubject<Course[]>([]);
@@ -28,7 +30,7 @@ export class SharedDataService {
   private futureCoursesRefsSubject = new BehaviorSubject<string[]>([]);
   public futureCoursesRefs$ = this.futureCoursesRefsSubject.asObservable();
   private prerequisiteMap = new Map<string, string[]>(); // Prerequisite relationships map
-  updateDegreeData(data: any) {
+  updateDegreeData(data: any): void {
     this.degreeDataSubject.next(data);
     if (data && data.length > 0) {
       if (data[0].PassedCoursesData) { // Initialize course data using the original subjects
@@ -64,6 +66,23 @@ export class SharedDataService {
   }
   updateSelectedTrack(track: string) {
     this.selectedTrackSubject.next(track);
+    this.updateFilteredPlans();
+  }
+  private updateFilteredPlans(): void {
+    const data = this.degreeDataSubject.getValue();
+    const selectedTrack = this.selectedTrackSubject.getValue();
+    if (data && data.length > 0 && data[0].DefaultPlansData) {
+      const filteredPlans = data[0].DefaultPlansData.filter((plan: any) => plan.Title.includes(selectedTrack) || plan.Title.includes(this.getTrackAbbreviation(selectedTrack))); // Filter plans based on track
+      this.filteredPlansSubject.next(filteredPlans);
+    }
+  }
+  private getTrackAbbreviation(track: string): string { // Helper function to convert track names to abbreviations
+    if (track === 'Application') return 'App';
+    if (track === 'DevOps') return 'DevOps';
+    if (track === 'Entrepreneurial and Marketing') return 'E&M';
+    if (track === 'Data Science') return 'DS';
+    if (track === 'Virtual Reality') return 'VR';
+    return track;
   }
   getCurrentTrack(): string {
     return this.selectedTrackSubject.getValue();
