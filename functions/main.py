@@ -1,8 +1,13 @@
 from firebase_functions import https_fn
-from firebase_admin import initialize_app, firestore
+from firebase_admin import initialize_app, firestore, credentials
 import json
 from google.cloud.firestore_v1.document import DocumentReference
-initialize_app()
+cred = credentials.ApplicationDefault()
+initialize_app(cred)
+from firebase_functions import firestore_fn, options
+from firebase_functions.firestore_fn import (Event, FirestoreEvent, DocumentSnapshot, Change)
+options.set_global_options(region=options.SupportedRegion.US_CENTRAL1)
+db = firestore.client()
 class FirestoreEncoder(json.JSONEncoder): # Custom JSON encoder to handle Firestore objects
     def default(self, obj):
         if isinstance(obj, DocumentReference):
@@ -11,24 +16,14 @@ class FirestoreEncoder(json.JSONEncoder): # Custom JSON encoder to handle Firest
 @https_fn.on_request()
 def get_degree_data(req: https_fn.Request) -> https_fn.Response:
     if req.method == 'OPTIONS': # Set CORS headers for preflight requests
-        headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '3600'
-        }
+        headers = {'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 'Access-Control-Max-Age': '3600'}
         return https_fn.Response("", status=204, headers=headers)
-    headers = { # Set CORS headers for main requests
-        'Access-Control-Allow-Origin': '*'
-    }
+    headers = {'Access-Control-Allow-Origin': '*'} # Set CORS headers for main requests
     try:
         db = firestore.client()
         degrees = db.collection("degrees").get()
         degrees_data = []
-        reference_fields = { # Define all fields that contain references
-            "courses": ["PassedCourses", "AvailableCourses", "FutureCourses"],
-            "plans": ["DefaultPlans"]
-        }
+        reference_fields = {"courses": ["PassedCourses", "AvailableCourses", "FutureCourses"], "plans": ["DefaultPlans"]} # Define all fields that contain references
         for degree in degrees:
             degree_dict = degree.to_dict()
             serializable_degree = {}
@@ -67,3 +62,24 @@ def process_reference_list(key, value, result_dict): # Helper function to proces
             print(f"Error processing reference in {key}: {e}")
     result_dict[f"{key}Data"] = data_list # Add the data to our result
     result_dict[key] = value  # Let the encoder handle the original references
+@https_fn.on_document_written(document="degrees/{degreeId}")
+def ondegreedataupdated(event: FirestoreEvent[Change[DocumentSnapshot], dict]):
+    """
+    This function is triggered when a document in the 'degrees' collection is created, updated, or deleted.
+    It logs the event and saves the data to Firestore.
+    """
+    degree_id = event.params["degreeId"]
+    if event.data is None:
+        print(f"Document was deleted: {degree_id}")
+        return
+    new_value = event.data.after.to_dict()
+    previous_value = event.data.before.to_dict()
+    print(f"Degree data changed for degree ID: {degree_id}")
+    print(f"Previous value: {previous_value}")
+    print(f"New value: {new_value}")
+    try: # Example: Save the data to Firestore (you might want to save it to a different collection/document)
+        doc_ref = db.collection("degree_updates").document(degree_id)
+        doc_ref.set(new_value)
+        print(f"Degree data saved to Firestore for degree ID: {degree_id}")
+    except Exception as e:
+        print(f"Error saving degree data to Firestore: {e}")
