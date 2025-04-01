@@ -1,4 +1,4 @@
-from firebase_functions import https_fn, firestore_fn, options
+from firebase_functions import https_fn, options
 from firebase_admin import initialize_app, firestore
 import json
 from google.cloud.firestore_v1.document import DocumentReference
@@ -6,7 +6,6 @@ try:
     initialize_app() # Try to initialize with default project
 except ValueError:
     initialize_app(options={'projectId': 'demo-project'}) # If that fails, initialize with no arguments for emulator use
-from firebase_functions.firestore_fn import Event, DocumentSnapshot, Change
 options.set_global_options(region=options.SupportedRegion.US_CENTRAL1)
 db = None
 def get_db():
@@ -86,37 +85,28 @@ def get_degree_data(req: https_fn.Request) -> https_fn.Response:
         return https_fn.Response("Method not allowed", status=405, headers=headers)
 def process_reference_list(key, value, result_dict): # Helper function to process lists of references
     data_list = []
+    db = get_db()
     for ref in value:
         if ref is None:
             continue
         try:
             if hasattr(ref, 'get'):
                 doc = ref.get()
-                if doc.exists:
-                    data_list.append(doc.to_dict())
+            elif isinstance(ref, str) and '/' in ref:
+                collection_id, doc_id = ref.split('/', 1)
+                doc_ref = db.collection(collection_id).document(doc_id)
+            else:
+                print(f"Unrecognized reference format in {key}: {ref}")
+                continue
+            doc = doc_ref.get()
+            if doc.exists:
+                # Include the document ID in the data
+                doc_data = doc.to_dict()
+                doc_data['id'] = doc.id
+                data_list.append(doc_data)
         except Exception as e:
             print(f"Error processing reference in {key}: {e}")
-    result_dict[f"{key}Data"] = data_list # Add the data to our result
+    # Store the resolved data
+    result_dict[f"{key}Data"] = data_list
+    # Keep the original references 
     result_dict[key] = value  # Let the encoder handle the original references
-@firestore_fn.on_document_written(document="degrees/{degreeId}")
-def ondegreedataupdated(event: Event[Change[DocumentSnapshot]]):
-    """
-    This function is triggered when a document in the 'degrees' collection is created, updated, or deleted.
-    It logs the event and saves the data to Firestore.
-    """
-    degree_id = event.params["degreeId"]
-    if event.data is None:
-        print(f"Document was deleted: {degree_id}")
-        return
-    new_value = event.data.after.to_dict()
-    previous_value = event.data.before.to_dict()
-    print(f"Degree data changed for degree ID: {degree_id}")
-    print(f"Previous value: {previous_value}")
-    print(f"New value: {new_value}")
-    try: # Example: Save the data to Firestore (you might want to save it to a different collection/document)
-        db = get_db()
-        doc_ref = db.collection("degree_updates").document(degree_id)
-        doc_ref.set(new_value)
-        print(f"Degree data saved to Firestore for degree ID: {degree_id}")
-    except Exception as e:
-        print(f"Error saving degree data to Firestore: {e}")
