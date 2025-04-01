@@ -79,16 +79,10 @@ def get_degree_data(req: https_fn.Request) -> https_fn.Response:
             if not doc.exists:
                 return https_fn.Response(f"Degree with ID {degree_id} not found", status=404, headers=headers)
             degree_ref.update(data) # Update the document
-            return https_fn.Response(
-                json.dumps({"success": True, "id": degree_id}),
-                mimetype="application/json",
-                headers=headers
-            )
+            return https_fn.Response(json.dumps({"success": True, "id": degree_id}), mimetype="application/json", headers=headers)
         except Exception as e:
             return https_fn.Response(f"Error updating data: {e}", status=500, headers=headers)
-    
-    # Handle other methods
-    else:
+    else: # Handle other methods
         return https_fn.Response("Method not allowed", status=405, headers=headers)
 def process_reference_list(key, value, result_dict): # Helper function to process lists of references
     data_list = []
