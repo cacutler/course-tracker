@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { CoursesService } from './courses.service';
 interface Course {
   Title: string;
   CreditHours: number;
@@ -141,5 +142,12 @@ export class SharedDataService {
     const updatedAvailableRefs = courseRef && !availableRefs.includes(courseRef) ? [...availableRefs, courseRef] : availableRefs;
     this.futureCoursesRefsSubject.next(updatedFutureRefs);
     this.availableCoursesRefsSubject.next(updatedAvailableRefs);
+  }
+  saveChangesToFirestore(coursesService: CoursesService, degreeId: string): Observable<any> {
+    const degreeData = this.degreeDataSubject.getValue()[0];
+    degreeData.PassedCourses = this.passedCoursesRefsSubject.getValue();
+    degreeData.AvailableCourses = this.availableCoursesRefsSubject.getValue();
+    degreeData.FutureCourses = this.futureCoursesRefsSubject.getValue();
+    return coursesService.updateDegreeData(degreeId, degreeData);
   }
 }

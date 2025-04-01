@@ -10,4 +10,7 @@ export class CoursesService {
   getDegreeData(): Observable<any[]> {
     return this.http.get<any[]>(this.degreeDataUrl);
   }
+  updateDegreeData(degreeId: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.degreeDataUrl}?id=${degreeId}`, data);
+  }
 }
