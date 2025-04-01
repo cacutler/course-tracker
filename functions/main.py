@@ -34,7 +34,7 @@ def get_degree_data(req: https_fn.Request) -> https_fn.Response:
             reference_fields = {"courses": ["PassedCourses", "AvailableCourses", "FutureCourses"], "plans": ["DefaultPlans"]} # Define all fields that contain references
             for degree in degrees:
                 degree_dict = degree.to_dict()
-                serializable_degree = {}
+                serializable_degree = {"id": degree.id}
                 for key, value in degree_dict.items():
                     if isinstance(value, list) and key in reference_fields["courses"]: # Handle course reference fields
                         process_reference_list(key, value, serializable_degree)
