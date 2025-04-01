@@ -71,7 +71,7 @@ def process_reference_list(key, value, result_dict): # Helper function to proces
     result_dict[f"{key}Data"] = data_list # Add the data to our result
     result_dict[key] = value  # Let the encoder handle the original references
 @firestore_fn.on_document_written(document="degrees/{degreeId}")
-def ondegreedataupdated(event: Event[Change[DocumentSnapshot], dict]):
+def ondegreedataupdated(event: Event[Change[DocumentSnapshot]]):
     """
     This function is triggered when a document in the 'degrees' collection is created, updated, or deleted.
     It logs the event and saves the data to Firestore.
@@ -86,6 +86,7 @@ def ondegreedataupdated(event: Event[Change[DocumentSnapshot], dict]):
     print(f"Previous value: {previous_value}")
     print(f"New value: {new_value}")
     try: # Example: Save the data to Firestore (you might want to save it to a different collection/document)
+        db = get_db()
         doc_ref = db.collection("degree_updates").document(degree_id)
         doc_ref.set(new_value)
         print(f"Degree data saved to Firestore for degree ID: {degree_id}")
