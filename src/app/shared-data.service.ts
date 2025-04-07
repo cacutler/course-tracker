@@ -144,12 +144,14 @@ export class SharedDataService {
     this.availableCoursesRefsSubject.next(updatedAvailableRefs);
   }
   saveChangesToFirestore(coursesService: CoursesService, degreeId: string): Observable<any> {
-    const degreeData = this.degreeDataSubject.getValue()[0];
+    const updateData = {
+      PassedCourses: this.passedCoursesRefsSubject.getValue(),
+      AvailableCourses: this.availableCoursesRefsSubject.getValue(),
+      FutureCourses: this.futureCoursesRefsSubject.getValue()
+    };
+    
     console.log('Using degree ID for Firestore update:', degreeId);
-    degreeData.PassedCourses = this.passedCoursesRefsSubject.getValue();
-    degreeData.AvailableCourses = this.availableCoursesRefsSubject.getValue();
-    degreeData.FutureCourses = this.futureCoursesRefsSubject.getValue();
-    console.log('Data being saved to Firestore:', degreeData);
-    return coursesService.updateDegreeData(degreeId, degreeData);
+    console.log('Data being saved to Firestore:', updateData);
+    return coursesService.updateDegreeData(degreeId, updateData);
   }
 }
