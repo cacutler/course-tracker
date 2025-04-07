@@ -4,6 +4,12 @@
 
 My senior project is a course tracker/planner meant as a streamlined, easy-to-use version of other methods of course planning like DegreeWorks and Excel spreadsheets.  I am using the Angular framework and TypeScript for the front-end and Google Firebase for the backend and hosting.  
 
+### UI Screenshots
+
+![Top](screenshot1.png)
+
+![Bottom](screenshot2.png)
+
 ### Figma Mockup
 https://www.figma.com/design/LZoU9NSJAXmruuc4uv3OQE/Course-Planner?node-id=0-1&p=f&t=OTUoCZl0vSOBlOsc-0
 
