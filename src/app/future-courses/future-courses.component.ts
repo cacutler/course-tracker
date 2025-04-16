@@ -22,60 +22,32 @@ export class FutureCoursesComponent implements OnInit {
   availableCourses: any[] = [];
   constructor(private sharedDataService: SharedDataService) {}
   ngOnInit(): void {
-    combineLatest([
-      this.sharedDataService.degreeData$,
-      this.sharedDataService.passedCoursesRefs$,
-      this.sharedDataService.passedCourses$,
-      this.sharedDataService.availableCourses$,
-      this.sharedDataService.futureCourses$ // Add this to track future courses
-    ]).subscribe(([degreeData, completedRefs, completedObjects, availableCourses, futureCourses]) => {
-      // Load future courses
-      if (futureCourses && futureCourses.length > 0) {
+    combineLatest([this.sharedDataService.degreeData$, this.sharedDataService.passedCoursesRefs$, this.sharedDataService.passedCourses$, this.sharedDataService.availableCourses$, this.sharedDataService.futureCourses$]).subscribe(([degreeData, completedRefs, completedObjects, availableCourses, futureCourses]) => {
+      if (futureCourses && futureCourses.length > 0) {// Load future courses
         this.futureCourses = futureCourses;
       }
-      // Track completed course references and objects
-      this.completedCourses = completedRefs || [];
+      this.completedCourses = completedRefs || []; // Track completed course references and objects
       this.completedCourseObjects = completedObjects || [];
       this.availableCourses = availableCourses || [];
-      // Only move eligible courses if not already done
-      if (this.futureCourses.length > 0) {
+      if (this.futureCourses.length > 0) { // Only move eligible courses if not already done
         this.moveEligibleCoursesToAvailable();
       }
     });
   }
-  hasCompletedAllPrerequisites(course: Course): boolean {
-    // If there are no prerequisites, return true
+  hasCompletedAllPrerequisites(course: Course): boolean { // If there are no prerequisites, return true
     if (!course.Prerequisites || course.Prerequisites.length === 0) {
       return true;
     }
-    // Check if ALL prerequisites have been completed
-    return course.Prerequisites.every(prereq => 
-      this.isPrerequisiteCompleted(prereq)
-    );
+    return course.Prerequisites.every(prereq => this.isPrerequisiteCompleted(prereq)); // Check if ALL prerequisites have been completed
   }
   isPrerequisiteCompleted(prerequisite: string): boolean {
-    // Check completed course references
-    const refMatch = this.completedCourses.some(completedRef => 
-      completedRef.includes(prerequisite) || 
-      prerequisite.includes(completedRef)
-    );
-    // Check completed course objects
-    const objectMatch = this.completedCourseObjects.some(completedCourse => 
-      completedCourse.Number.includes(prerequisite) || 
-      prerequisite.includes(completedCourse.Number)
-    );
+    const refMatch = this.completedCourses.some(completedRef => completedRef.includes(prerequisite) || prerequisite.includes(completedRef)); // Check completed course references
+    const objectMatch = this.completedCourseObjects.some(completedCourse => completedCourse.Number.includes(prerequisite) || prerequisite.includes(completedCourse.Number)); // Check completed course objects
     return refMatch || objectMatch;
   }
   moveEligibleCoursesToAvailable(): void {
-    const eligibleCourses = this.futureCourses.filter(course => 
-      this.hasCompletedAllPrerequisites(course) &&
-      !this.availableCourses.some(availableCourse => 
-        availableCourse.Number === course.Number
-      )
-    );
-
-    // Use a simple loop instead of forEach to reduce complexity
-    for (const course of eligibleCourses) {
+    const eligibleCourses = this.futureCourses.filter(course => this.hasCompletedAllPrerequisites(course) && !this.availableCourses.some(availableCourse => availableCourse.Number === course.Number));
+    for (const course of eligibleCourses) { // Use a simple loop instead of forEach to reduce complexity
       this.sharedDataService.moveFromFutureToAvailable(course, course.Number);
     }
   }
@@ -83,11 +55,8 @@ export class FutureCoursesComponent implements OnInit {
     if (this.hasCompletedAllPrerequisites(course)) {
       return 'Eligible';
     } else {
-      // Find and return the missing prerequisites
-      const missingPrereqs = course.Prerequisites?.filter(
-        prereq => !this.isPrerequisiteCompleted(prereq)
-      );
-      return `Missing: ${missingPrereqs?.join(', ')}`;
+      const missingPrereqs = course.Prerequisites?.filter(prereq => !this.isPrerequisiteCompleted(prereq)); // Find and return the missing prerequisites
+      return `Missing - ${missingPrereqs?.join(', ')}`;
     }
   }
 }
