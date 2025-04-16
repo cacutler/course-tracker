@@ -28,3 +28,11 @@ h3 {
     margin-top: 1rem;
     margin-bottom: 0.5rem;
 }
+@media screen and (max-width: 1200px) {
+    #fall {
+        left: 5rem
+    }
+    #spring {
+        right: 5rem;
+    }
+}
