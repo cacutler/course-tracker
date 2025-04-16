@@ -13,6 +13,7 @@
     flex-direction: column;
     border: #000 solid 1px;
     background-color: rgb(238, 36, 36);
+    height: fit-content;
 }
 #right {
     flex: 1;
